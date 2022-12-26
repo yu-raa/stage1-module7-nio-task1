@@ -3,6 +3,7 @@ package com.epam.mjc.nio;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.logging.Logger;
 
 
 public class FileReader {
@@ -12,7 +13,8 @@ public class FileReader {
             return new Profile(info[0], Integer.parseInt(info[1]), info[2], Long.parseLong(info[3]));
         }
         catch (NumberFormatException e) {
-            System.err.println(e.getMessage());
+            Logger logger = Logger.getGlobal();
+            logger.info(e.getMessage());
             return null;
         }
     }
@@ -30,7 +32,8 @@ public class FileReader {
             }
         }
         catch (IOException e) {
-            System.err.println(e.getMessage());
+            Logger logger = Logger.getGlobal();
+            logger.info(e.getMessage());
         }
 
         return result.toString();
@@ -52,7 +55,8 @@ public class FileReader {
         return tryToInstantiateProfile(info);
         }
         catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
+            Logger logger = Logger.getGlobal();
+            logger.info(e.getMessage());
             return null;
         }
     }
