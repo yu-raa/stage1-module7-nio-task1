@@ -3,19 +3,24 @@ package com.epam.mjc.nio;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 public class FileReader {
 
+    private Profile tryToInstantiateProfile(String[] info){
+        try {
+            return new Profile(info[0], Integer.parseInt(info[1]), info[2], Long.parseLong(info[3]));
+        }
+        catch (NumberFormatException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
     private String read(File file) throws FileNotFoundException {
         StringBuilder result = new StringBuilder();
-        Path filePath = Paths.get(file.getPath());
-        RandomAccessFile accessFile = new RandomAccessFile(file, "rw");
-        if (Files.exists(filePath)) {
-        try (FileChannel inChannel = accessFile.getChannel()) {
+        try (RandomAccessFile accessFile = new RandomAccessFile(file, "rw"); FileChannel inChannel = accessFile.getChannel())
+        {
             long size = inChannel.size();
             ByteBuffer buffer = ByteBuffer.allocate((int)size);
             inChannel.read(buffer);
@@ -26,7 +31,6 @@ public class FileReader {
         }
         catch (IOException e) {
             System.err.println(e.getMessage());
-        }
         }
 
         return result.toString();
@@ -45,13 +49,7 @@ public class FileReader {
                 }
             }
         }
-        try {
-            return new Profile(info[0], Integer.parseInt(info[1]), info[2], Long.parseLong(info[3]));
-        }
-        catch (NumberFormatException e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
+        return tryToInstantiateProfile(info);
         }
         catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
